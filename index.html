@@ -1,0 +1,932 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Saranathan CSE AI&ML Symposium - Chronicles 2026</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* --- DESIGN SYSTEM & CSS VARIABLES --- */
+        :root {
+            --bg-dark: #05070f;
+            --bg-card: rgba(10, 15, 30, 0.6);
+            --border-glass: rgba(255, 255, 255, 0.07);
+            --neon-blue: #00f0ff;
+            --neon-purple: #9d4edd;
+            --neon-gold: #ffd700;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --font-header: 'Orbitron', sans-serif;
+            --font-body: 'Rajdhani', sans-serif;
+        }
+
+        /* --- GLOBAL RESETS --- */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            font-family: var(--font-body);
+            font-size: 1.1rem;
+            overflow-x: hidden;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(0, 240, 255, 0.06) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(157, 78, 221, 0.06) 0%, transparent 40%);
+        }
+
+        /* --- BACKGROUND PARTICLE CANVAS --- */
+        #particle-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* --- GLASSMORPHISM UTILITY --- */
+        .glass-panel {
+            background: var(--bg-card);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border: 1px solid var(--border-glass);
+            border-radius: 16px;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .glass-panel:hover {
+            border-color: rgba(0, 240, 255, 0.3);
+            box-shadow: 0 0 25px rgba(0, 240, 255, 0.2);
+            transform: translateY(-5px);
+        }
+
+        /* --- NAVBAR --- */
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 100;
+            background: rgba(5, 7, 15, 0.8);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-glass);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.2rem 2rem;
+        }
+
+        .logo {
+            font-family: var(--font-header);
+            font-weight: 900;
+            font-size: 1.4rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            background: linear-gradient(45deg, var(--neon-blue), var(--neon-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-main);
+            text-decoration: none;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--neon-blue);
+            text-shadow: 0 0 8px var(--neon-blue);
+        }
+
+        /* --- HERO SECTION --- */
+        #hero {
+            position: relative;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 0 2rem;
+            overflow: hidden;
+        }
+
+        .hero-content {
+            z-index: 10;
+            max-width: 900px;
+        }
+
+        .dept-title {
+            font-family: var(--font-header);
+            font-size: 1.1rem;
+            color: var(--neon-blue);
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            margin-bottom: 0.5rem;
+            text-shadow: 0 0 10px rgba(0, 240, 255, 0.3);
+        }
+
+        .hero-title {
+            font-family: var(--font-header);
+            font-size: 3.8rem;
+            font-weight: 900;
+            letter-spacing: 2px;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            text-shadow: 0 0 25px rgba(0, 240, 255, 0.3);
+        }
+
+        .hero-title span {
+            color: var(--neon-purple);
+            text-shadow: 0 0 25px rgba(157, 78, 221, 0.3);
+        }
+
+        .hero-tagline {
+            font-size: 1.4rem;
+            color: var(--text-muted);
+            margin-bottom: 2.5rem;
+            font-weight: 500;
+        }
+
+        .cta-btn {
+            font-family: var(--font-header);
+            padding: 1rem 2.5rem;
+            font-size: 1rem;
+            font-weight: 700;
+            color: #fff;
+            background: transparent;
+            border: 2px solid var(--neon-blue);
+            box-shadow: 0 0 15px rgba(0, 240, 255, 0.2);
+            border-radius: 4px;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: all 0.3s ease;
+        }
+
+        .cta-btn:hover {
+            background: var(--neon-blue);
+            color: var(--bg-dark);
+            box-shadow: 0 0 25px var(--neon-blue);
+        }
+
+        /* SVG Cyber Skyline Graphic Container */
+        .skyline-container {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 35vh;
+            z-index: 1;
+            pointer-events: none;
+            opacity: 0.15;
+        }
+
+        .skyline-svg {
+            width: 100%;
+            height: 100%;
+            bottom: 0;
+            position: absolute;
+        }
+
+        /* --- SECTION LAYOUTS --- */
+        section {
+            padding: 6rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            font-family: var(--font-header);
+            font-size: 2.2rem;
+            text-align: center;
+            margin-bottom: 3.5rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--neon-blue), var(--neon-purple));
+        }
+
+        /* --- ABOUT SYMPOSIUM --- */
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: center;
+        }
+
+        .about-text h3 {
+            font-family: var(--font-header);
+            color: var(--neon-blue);
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .about-text p {
+            color: var(--text-muted);
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+        }
+
+        /* --- AI POSTER SHOWCASE --- */
+        .poster-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .poster-wrapper {
+            max-width: 450px;
+            width: 100%;
+            padding: 1rem;
+            position: relative;
+        }
+
+        .poster-img {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+            display: block;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .poster-badge {
+            position: absolute;
+            top: -15px;
+            right: -15px;
+            background: linear-gradient(135deg, var(--neon-purple), var(--neon-blue));
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            font-family: var(--font-header);
+            font-weight: bold;
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 15px rgba(0,240,255,0.4);
+        }
+
+        /* --- PRIZE COMPARTMENT MATRIX --- */
+        .prize-banner {
+            margin-bottom: 4rem;
+            padding: 2.5rem;
+            text-align: center;
+            border: 1px dashed rgba(0, 240, 255, 0.3);
+            background: linear-gradient(180deg, rgba(10,15,30,0.8) 0%, rgba(5,7,15,0.6) 100%);
+        }
+
+        .prize-banner h3 {
+            font-family: var(--font-header);
+            font-size: 1.8rem;
+            color: var(--neon-gold);
+            margin-bottom: 1.5rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .prize-row {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+
+        .prize-node {
+            flex: 1;
+            min-width: 200px;
+            padding: 1.5rem;
+            background: rgba(255,255,255,0.02);
+            border-radius: 8px;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .prize-node h4 {
+            font-family: var(--font-header);
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .prize-node .amt {
+            font-family: var(--font-header);
+            font-size: 2.2rem;
+            font-weight: 900;
+            color: var(--text-main);
+            text-shadow: 0 0 10px rgba(255,255,255,0.2);
+        }
+
+        .prize-node.p1 h4 { color: var(--neon-gold); }
+        .prize-node.p1 .amt { color: var(--neon-gold); text-shadow: 0 0 15px rgba(255, 215, 0, 0.3); }
+        .prize-node.p2 h4 { color: #e2e8f0; }
+        .prize-node.p3 h4 { color: #cd7f32; }
+
+        /* --- TRACKS & DISCUSSION BOARD --- */
+        .issues-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+        }
+
+        .issue-card {
+            padding: 2.5rem;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .card-top i {
+            font-size: 2.2rem;
+            color: var(--neon-blue);
+            margin-bottom: 1.5rem;
+        }
+
+        .issue-card h3 {
+            font-family: var(--font-header);
+            font-size: 1.4rem;
+            margin-bottom: 1rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .issue-card p {
+            color: var(--text-muted);
+            font-size: 1rem;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+
+        .card-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: auto;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .status-tag {
+            display: inline-block;
+            padding: 0.3rem 0.8rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            background: rgba(157, 78, 221, 0.15);
+            color: var(--neon-purple);
+            border: 1px solid rgba(157, 78, 221, 0.3);
+        }
+
+        .track-prize {
+            font-family: var(--font-header);
+            font-size: 0.9rem;
+            color: var(--neon-blue);
+            font-weight: 700;
+        }
+
+        /* --- AI MUSIC PLAYER --- */
+        .player-container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 2.5rem;
+            text-align: center;
+        }
+
+        .track-info {
+            margin-bottom: 2rem;
+        }
+
+        .track-title {
+            font-family: var(--font-header);
+            font-size: 1.6rem;
+            color: var(--neon-blue);
+            margin-bottom: 0.5rem;
+        }
+
+        .track-artist {
+            color: var(--text-muted);
+            font-size: 1rem;
+            letter-spacing: 1px;
+        }
+
+        .audio-visualizer {
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            gap: 6px;
+            height: 60px;
+            margin-bottom: 2rem;
+        }
+
+        .bar {
+            width: 8px;
+            height: 15px;
+            background: linear-gradient(to top, var(--neon-purple), var(--neon-blue));
+            border-radius: 4px;
+            transition: height 0.1s ease;
+        }
+
+        audio {
+            width: 100%;
+            margin-top: 1rem;
+            accent-color: var(--neon-blue);
+        }
+
+        /* --- TEAM SECTION --- */
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 2rem;
+        }
+
+        .team-card {
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .member-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            margin: 0 auto;
+            margin-bottom: 1.5rem;
+            border: 2px solid var(--neon-purple);
+            box-shadow: 0 0 15px rgba(157, 78, 221, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255,255,255,0.05);
+        }
+
+        .member-avatar i {
+            font-size: 2.5rem;
+            color: var(--text-muted);
+        }
+
+        .team-card h3 {
+            font-family: var(--font-header);
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .team-card p {
+            color: var(--neon-blue);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* --- FOOTER & CONTACT --- */
+        footer {
+            border-top: 1px solid var(--border-glass);
+            background: rgba(3, 5, 12, 0.95);
+            padding: 4rem 2rem 2rem;
+        }
+
+        .footer-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+
+        .footer-brand h2 {
+            font-family: var(--font-header);
+            margin-bottom: 1rem;
+            color: #fff;
+            font-size: 1.3rem;
+        }
+
+        .footer-brand p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .footer-links h3, .footer-contact h3 {
+            font-family: var(--font-header);
+            color: var(--neon-blue);
+            font-size: 1.1rem;
+            margin-bottom: 1.2rem;
+            text-transform: uppercase;
+        }
+
+        .footer-links ul {
+            list-style: none;
+        }
+
+        .footer-links ul li {
+            margin-bottom: 0.8rem;
+        }
+
+        .footer-links ul li a {
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-links ul li a:hover {
+            color: #fff;
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .social-icons a {
+            color: var(--text-muted);
+            font-size: 1.3rem;
+            transition: color 0.3s;
+        }
+
+        .social-icons a:hover {
+            color: var(--neon-purple);
+        }
+
+        .copyright {
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            border-top: 1px solid rgba(255,255,255,0.05);
+            padding-top: 2rem;
+        }
+
+        /* --- RESPONSIVE MEDIA QUERIES --- */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            .hero-title {
+                font-size: 2.2rem;
+            }
+            .hero-tagline {
+                font-size: 1.1rem;
+            }
+            .about-grid {
+                grid-template-columns: 1fr;
+            }
+            section {
+                padding: 4rem 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="particle-canvas"></canvas>
+
+    <header>
+        <div class="nav-container">
+            <div class="logo">
+                <i class="fa-solid fa-brain"></i> CHRONICLES '26
+            </div>
+            <ul class="nav-links">
+                <li><a href="#hero">Portal</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#showcase">Poster</a></li>
+                <li><a href="#issues">Tracks</a></li>
+                <li><a href="#music">Anthem</a></li>
+                <li><a href="#team">Organizers</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <section id="hero">
+        <div class="hero-content">
+            <p class="dept-title">Saranathan College of Engineering</p>
+            <h1 class="hero-title">CSE AI & ML <span>Chronicles</span></h1>
+            <p class="hero-tagline">The ultimate technical and non-technical matrix compiled entirely by the 3rd & Final Year Students.</p>
+            <button class="cta-btn" onclick="document.getElementById('issues').scrollIntoView();">Explore Matrices</button>
+        </div>
+        
+        <div class="skyline-container">
+            <svg class="skyline-svg" viewBox="0 0 1440 300" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M0,300 L0,210 L40,210 L40,150 L90,150 L90,240 L150,240 L150,110 L210,110 L210,260 L280,260 L280,180 L340,180 L340,220 L410,220 L410,90 L480,90 L480,250 L560,250 L560,140 L620,140 L620,200 L700,200 L700,70 L780,70 L780,230 L840,230 L840,160 L920,160 L920,210 L1000,210 L1000,120 L1070,120 L1070,250 L1150,250 L1150,150 L1220,150 L1220,190 L1300,190 L1300,80 L1380,80 L1380,220 L1440,220 L1440,300 Z" fill="#0c0f24"/>
+                <path d="M0,300 L0,250 L60,250 L60,190 L120,190 L120,270 L190,270 L190,160 L270,160 L270,280 L320,280 L320,210 L390,210 L390,250 L460,250 L460,130 L530,130 L530,270 L600,270 L600,180 L680,180 L680,220 L760,220 L760,110 L830,110 L830,260 L900,260 L900,190 L980,190 L980,240 L1050,240 L1050,150 L1120,150 L1120,270 L1190,270 L1190,180 L1270,180 L1270,220 L1350,220 L1350,120 L1420,120 L1420,250 L1440,250 L1440,300 Z" fill="#070a1a" opacity="0.6"/>
+            </svg>
+        </div>
+    </section>
+
+    <section id="about">
+        <h2 class="section-title">The AI & ML Forge</h2>
+        <div class="about-grid">
+            <div class="about-text">
+                <h3>Architects of Intelligence</h3>
+                <p>Driven by the Department of Computer Science and Engineering (Artificial Intelligence & Machine Learning) at Saranathan College of Engineering, Chronicles '26 serves as a highly functional matrix where students push raw computations past traditional academic code bases.</p>
+                <p>Organized through the shared strategic execution of our 3rd and Final Year student bodies, this edition fuses advanced computational design parameters with high-stakes creative events to unlock multi-disciplinary potential.</p>
+            </div>
+            <div class="glass-panel" style="padding: 2.5rem; text-align: center;">
+                <i class="fa-solid fa-microchip" style="font-size: 3rem; color: var(--neon-purple); margin-bottom: 1.5rem;"></i>
+                <h4 style="font-family: var(--font-header); margin-bottom: 0.5rem;">Symposium Core</h4>
+                <p style="color: var(--text-muted); font-size: 0.95rem;">"Compiling raw datasets, adjusting hyper-parameters, and breaking down old engineering limitations to build highly cohesive technical cultures."</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="showcase">
+        <h2 class="section-title">Gemini Poster Showcase</h2>
+        <div class="poster-container">
+            <div class="glass-panel poster-wrapper">
+                <span class="poster-badge">AI Generated</span>
+                <img src="E:\sara_symposium\assets\poster.jpg.png" alt="Saranathan Campus Awareness Poster" class="poster-img">
+            </div>
+        </div>
+    </section>
+
+    <section id="issues">
+        <h2 class="section-title">Symposium Track Matrices</h2>
+        
+        <div class="glass-panel prize-banner">
+            <h3>Unified Cash Prize Matrix</h3>
+            <div class="prize-row">
+                <div class="prize-node p1">
+                    <h4>🥇 First Place</h4>
+                    <div class="amt">₹5,000</div>
+                </div>
+                <div class="prize-node p2">
+                    <h4>🥈 Second Place</h4>
+                    <div class="amt">₹4,000</div>
+                </div>
+                <div class="prize-node p3">
+                    <h4>🥉 Third Place</h4>
+                    <div class="amt">₹3,000</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="issues-grid">
+            <div class="glass-panel issue-card">
+                <div class="card-top">
+                    <i class="fa-solid fa-code"></i>
+                    <h3>Neural Compilation</h3>
+                    <p>Debug active high-latency operational structures and optimize network logic targets under tight compiler constraints.</p>
+                </div>
+                <div class="card-meta">
+                    <div class="status-tag">Technical Track</div>
+                    <div class="track-prize">Pool: ₹12K</div>
+                </div>
+            </div>
+            
+            <div class="glass-panel issue-card">
+                <div class="card-top">
+                    <i class="fa-solid fa-chart-line"></i>
+                    <h3>Train Loops</h3>
+                    <p>Architect and present complex algorithm models designed to maximize real-world processing data buffers.</p>
+                </div>
+                <div class="card-meta">
+                    <div class="status-tag">Technical Presentation</div>
+                    <div class="track-prize">Pool: ₹12K</div>
+                </div>
+            </div>
+
+            <div class="glass-panel issue-card">
+                <div class="card-top">
+                    <i class="fa-solid fa-terminal"></i>
+                    <h3>Structural Critique</h3>
+                    <p>Evaluate your fundamental speed and precision metrics in an interactive technical quiz landscape.</p>
+                </div>
+                <div class="card-meta">
+                    <div class="status-tag">Technical Quiz</div>
+                    <div class="track-prize">Pool: ₹12K</div>
+                </div>
+            </div>
+
+            <div class="glass-panel issue-card">
+                <div class="card-top">
+                    <i class="fa-solid fa-bezier-curve"></i>
+                    <h3>Design Sprint</h3>
+                    <p>Rapid canvas prototyping interface test. Build visual user interfaces and seamless asset interactions.</p>
+                </div>
+                <div class="card-meta">
+                    <div class="status-tag">Non-Tech Track</div>
+                    <div class="track-prize">Pool: ₹12K</div>
+                </div>
+            </div>
+
+            <div class="glass-panel issue-card">
+                <div class="card-top">
+                    <i class="fa-solid fa-shuffle"></i>
+                    <h3>System Shift</h3>
+                    <p>Adapt dynamically to critical, unannounced operating challenges and puzzles on the fly.</p>
+                </div>
+                <div class="card-meta">
+                    <div class="status-tag">Non-Tech Surprise</div>
+                    <div class="track-prize">Pool: ₹12K</div>
+                </div>
+            </div>
+
+            <div class="glass-panel issue-card">
+                <div class="card-top">
+                    <i class="fa-solid fa-camera"></i>
+                    <h3>Chronicle Capture</h3>
+                    <p>Frame composition layers across the campus environment to illustrate engineering and lifestyle interactions.</p>
+                </div>
+                <div class="card-meta">
+                    <div class="status-tag">Non-Tech Media</div>
+                    <div class="track-prize">Pool: ₹12K</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="music">
+        <h2 class="section-title">Symposium Anthem</h2>
+        <div class="glass-panel player-container">
+            <div class="track-info">
+                <div class="track-title">Chasing Deadlines</div>
+                <div class="track-artist">Syllabus For Survival Album • Cyberpunk Pop Rock</div>
+            </div>
+            
+            <div class="audio-visualizer" id="visualizer"></div>
+
+            <audio controls id="main-audio">
+                <source src="E:\sara_symposium\assets\anthem.mp3.mp3" type="audio/mpeg">
+                Your browser does not support the audio element.
+            </audio>
+        </div>
+    </section>
+
+    <section id="team">
+        <h2 class="section-title">Symposium Conveners</h2>
+        <div class="team-grid">
+            <div class="glass-panel team-card">
+                <div class="member-avatar"><i class="fa-solid fa-laptop-code"></i></div>
+                <h3>Final Year Lead</h3>
+                <p>Core Architectures</p>
+            </div>
+            <div class="glass-panel team-card">
+                <div class="member-avatar"><i class="fa-solid fa-bezier-curve"></i></div>
+                <h3>3rd Year Operations</h3>
+                <p>Interface Logic</p>
+            </div>
+            <div class="glass-panel team-card">
+                <div class="member-avatar"><i class="fa-solid fa-sliders"></i></div>
+                <h3>Logistics Control</h3>
+                <p>Event Runtime</p>
+            </div>
+        </div>
+    </section>
+
+    <footer id="contact">
+        <div class="footer-grid">
+            <div class="footer-brand">
+                <h2>CHRONICLES '26</h2>
+                <p>Saranathan College of Engineering. Department of Computer Science and Engineering (Artificial Intelligence & Machine Learning).</p>
+            </div>
+            <div class="footer-links">
+                <h3>Navigation Nodes</h3>
+                <ul>
+                    <li><a href="#hero">Portal Core</a></li>
+                    <li><a href="#about">Department Data</a></li>
+                    <li><a href="#showcase">Render Analytics</a></li>
+                </ul>
+            </div>
+            <div class="footer-contact">
+                <h3>Terminal Inquiries</h3>
+                <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 0.5rem;">symposium@saranathan.ac.in</p>
+                <div class="social-icons">
+                    <a href="#"><i class="fa-brands fa-github"></i></a>
+                    <a href="#"><i class="fa-brands fa-linkedin"></i></a>
+                    <a href="#"><i class="fa-brands fa-discord"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="copyright">
+            &copy; 2026 Saranathan College of Engineering (CSE AI & ML). Initialized via Event Runtime Protocols.
+        </div>
+    </footer>
+
+    <script>
+        const canvas = document.getElementById('particle-canvas');
+        const ctx = canvas.getContext('2d');
+
+        let particlesArray = [];
+        const numberOfParticles = 45;
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 2 + 0.5;
+                this.speedX = Math.random() * 0.4 - 0.2;
+                this.speedY = Math.random() * 0.4 - 0.2;
+                this.color = Math.random() > 0.5 ? 'rgba(0, 240, 255, 0.3)' : 'rgba(157, 78, 221, 0.3)';
+            }
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+
+                if (this.x > canvas.width || this.x < 0) this.speedX *= -1;
+                if (this.y > canvas.height || this.y < 0) this.speedY *= -1;
+            }
+            draw() {
+                ctx.fillStyle = this.color;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        function initParticles() {
+            particlesArray = [];
+            for (let i = 0; i < numberOfParticles; i++) {
+                particlesArray.push(new Particle());
+            }
+        }
+
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for (let i = 0; i < particlesArray.length; i++) {
+                particlesArray[i].update();
+                particlesArray[i].draw();
+            }
+            requestAnimationFrame(animateParticles);
+        }
+
+        initParticles();
+        animateParticles();
+
+        /* --- AUDIO VISUALIZER SIMULATOR --- */
+        const visualizerContainer = document.getElementById('visualizer');
+        const audio = document.getElementById('main-audio');
+        const totalBars = 16;
+        const barsElements = [];
+
+        for (let i = 0; i < totalBars; i++) {
+            const bar = document.createElement('div');
+            bar.classList.add('bar');
+            visualizerContainer.appendChild(bar);
+            barsElements.push(bar);
+        }
+
+        let animationFrameId;
+
+        function simulateVisualizer() {
+            if (!audio.paused) {
+                barsElements.forEach(bar => {
+                    const targetHeight = Math.random() * 50 + 10;
+                    bar.style.height = `${targetHeight}px`;
+                });
+                animationFrameId = setTimeout(simulateVisualizer, 100);
+            } else {
+                barsElements.forEach(bar => {
+                    bar.style.height = '15px';
+                });
+            }
+        }
+
+        audio.addEventListener('play', () => { simulateVisualizer(); });
+        audio.addEventListener('pause', () => {
+            clearTimeout(animationFrameId);
+            barsElements.forEach(bar => bar.style.height = '15px');
+        });
+    </script>
+</body>
+</html>
